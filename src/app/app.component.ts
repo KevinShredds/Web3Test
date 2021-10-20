@@ -14,22 +14,13 @@ export class AppComponent implements OnInit {
   
   private window: any;
   private address: any;
-  
-  constructor(@Inject(DOCUMENT) private document: Document)
-  {
-    this.window = this.document.defaultView;
-  }
 
   public onConnectBtnClick() {
-    if (this.window.ethereum) {
-      this.window.web3 = new Web3(this.window.ethereum);
-      this.window.ethereum.enable();
-      //this.address = this.window.web3.getAddress();
-      console.log(this.window.web3.eth);
-
-      return true;
-    }
+    
   }
+  
+  constructor() {  }
+
   
   ngOnInit() {
     
