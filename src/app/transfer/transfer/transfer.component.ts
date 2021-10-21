@@ -25,20 +25,20 @@ export class TransferComponent implements OnInit {
   constructor() { }
 
   getAccountAndBalance() {
-    const that = this;
+    //const that = this;
     this.getUserBalance().
     then((retAccount: any) => {
-      that.user.address = retAccount.account;
-      that.user.balance = retAccount.balance;
+      //this.user.address = retAccount.account;
+      //this.user.balance = retAccount.balance;
 
       //document.getElementById('accountName').innerHTML = retAccount.account;
       //document.getElementById('balance').innerHTML = retAccount.balance;
       this.accountName = retAccount.account;
-      this.balance = retAccount.balance;
+      this.balance = window.web3.utils.fromWei(retAccount.balance, 'ether') ;
 
-      console.log('transfer.components :: getAccountAndBalance :: that.user');
-      console.log(that.user);
-      this.user = that.user;
+      console.log('transfer.components :: getAccountAndBalance :: this.user');
+      //console.log(this.user);
+      //this.user = this.user;
     }).catch((error) => {
       console.log(error);
     });
@@ -49,9 +49,7 @@ export class TransferComponent implements OnInit {
     } else {
       if (typeof window.web3 !== 'undefined') {
         this.web3 = window.web3.currentProvider;
-      } else {
-        this.web3 = new Web3.providers.HttpProvider('http://localhost:8545');
-      }
+      } 
       console.log('transfer.service :: constructor :: window.ethereum');
       window.web3 = new Web3(window.ethereum);
       console.log('transfer.service :: constructor :: this.web3');
@@ -117,7 +115,8 @@ export class TransferComponent implements OnInit {
 
   
   ngOnInit(): void {
-   
+    this.connectWallet();
+   this.getAccountAndBalance();
   }
 
 }
