@@ -14,109 +14,138 @@ declare let window: any;
 export class TransferComponent implements OnInit {
 
   private account: any = null;
-  private  web3: any;
+  
   private enable: any;
 
 
   public user:any;
   public balance = 0;
-  public accountName = "null";
+  public accountName = "Metamask is not connected";
+
 
   constructor() { }
 
-  getAccountAndBalance() {
-    //const that = this;
-    this.getUserBalance().
-    then((retAccount: any) => {
-      //this.user.address = retAccount.account;
-      //this.user.balance = retAccount.balance;
+  // getAccountAndBalance() {
+    
+  //   this.getUserBalance().
+  //   then((retAccount: any) => {
+            
+  //     this.accountName = retAccount.account;
+  //     this.balance = window.web3.utils.fromWei(retAccount.balance, 'ether') ;
 
-      //document.getElementById('accountName').innerHTML = retAccount.account;
-      //document.getElementById('balance').innerHTML = retAccount.balance;
-      this.accountName = retAccount.account;
-      this.balance = window.web3.utils.fromWei(retAccount.balance, 'ether') ;
+  //   }).catch((error) => {
+  //     console.log(error);
+  //   });
+  // }
 
-      console.log('transfer.components :: getAccountAndBalance :: this.user');
-      //console.log(this.user);
-      //this.user = this.user;
-    }).catch((error) => {
-      console.log(error);
-    });
+  public getAccountAndBalance() {
+      console.log("getAccounts from getAccountAndBalance")
+      window.web3.eth.getAccounts().then((accounts) => {
+        console.log(accounts);
+        document.getElementById('accountName').innerHTML = accounts[0];
+        window.web3.eth.getBalance(accounts[0]).then((balance) => {
+          console.log(balance);
+          document.getElementById('balance').innerHTML = balance;
+        })
+      })
+      
   }
+
   public connectWallet() {
+    
     if (window.ethereum === undefined) {
       alert('Non-Ethereum browser detected. Install MetaMask');
     } else {
       if (typeof window.web3 !== 'undefined') {
-        this.web3 = window.web3.currentProvider;
+        
+        
       } 
-      console.log('transfer.service :: constructor :: window.ethereum');
+      console.log("new WEb3")
       window.web3 = new Web3(window.ethereum);
-      console.log('transfer.service :: constructor :: this.web3');
-      console.log(this.web3);
-      this.enable = this.enableMetaMaskAccount();
-    }
-  }
-  private async enableMetaMaskAccount(): Promise<any> {
-    let enable = false;
-    await new Promise((resolve, reject) => {
-      enable = window.ethereum.enable();
-    });
-    return Promise.resolve(enable);
-  }
+      console.log(window.web3)
+      
+      window.web3.eth.requestAccounts();
 
-  private async getAccount(): Promise<any> {
-    console.log('transfer.service :: getAccount :: start');
-    if (this.account == null) {
-      this.account = await new Promise((resolve, reject) => {
-        console.log('transfer.service :: getAccount :: eth');
-        console.log(window.web3.eth);
-        window.web3.eth.getAccounts((err, retAccount) => {
-          console.log('transfer.service :: getAccount: retAccount');
-          console.log(retAccount);
-          if (retAccount.length > 0) {
-            this.account = retAccount[0];
-            resolve(this.account);
-          } else {
-            alert('transfer.service :: getAccount :: no accounts found.');
-            reject('No accounts found.');
-          }
-          if (err != null) {
-            alert('transfer.service :: getAccount :: error retrieving account');
-            reject('Error retrieving account');
-          }
-        });
-      }) as Promise<any>;
+      console.log("getAccounts from connectWallet")
+      window.web3.eth.getAccounts(console.log)
+      
+      //this.enable = this.enableMetaMaskAccount();
+      
+      //this.getAccountAndBalance();
     }
-    return Promise.resolve(this.account);
   }
-  public async getUserBalance(): Promise<any> {
-    const account = await this.getAccount();
-    console.log('transfer.service :: getUserBalance :: account');
-    console.log(account);
-    return new Promise((resolve, reject) => {
-      window.web3.eth.getBalance(account, function(err, balance) {
-        console.log('transfer.service :: getUserBalance :: getBalance');
-        console.log(balance);
-        if (!err) {
-          const retVal = {
-            account: account,
-            balance: balance
-          };
-          console.log('transfer.service :: getUserBalance :: getBalance :: retVal');
-          console.log(retVal);
-          resolve(retVal);
-        } else {
-          reject({account: 'error', balance: 0});
-        }
-      });
-    }) as Promise<any>;
-  }
+  // private async enableMetaMaskAccount(): Promise<any> {
+  //   let enable = false;
+  //   await new Promise((resolve, reject) => {
+  //     enable = window.web3.eth.requestAccounts();      
+  //   });
+  //   return Promise.resolve(enable);
+  // }
+
+  // private async getAccount(): Promise<any> {
+    
+  //   if (this.account == null) {
+  //     this.account = await new Promise((resolve, reject) => {
+        
+  //       window.web3.eth.getAccounts((err, retAccount) => {
+  //         console.log('getAccount: retAccount');
+  //         console.log(retAccount);
+  //         if (retAccount.length > 0) {
+            
+  //           this.account = retAccount[0];
+            
+  //           resolve(this.account);
+  //         } else {
+  //           alert('getAccount :: no accounts found.');
+  //           reject('No accounts found.');
+  //         }
+  //         if (err != null) {
+  //           alert('getAccount :: error retrieving account');
+  //           reject('Error retrieving account');
+  //         }
+  //       });
+  //     }) as Promise<any>;
+  //   }
+  //   return Promise.resolve(this.account);
+  // }
+  // public async getUserBalance(): Promise<any> {
+  //   const account = await this.getAccount();
+  //   console.log('getUserBalance :: account');
+  //   console.log(account);
+  //   return new Promise((resolve, reject) => {
+  //     window.web3.eth.getBalance(account, function(err, balance) {
+  //       console.log('getUserBalance :: getBalance');
+  //       console.log(balance);
+  //       if (!err) {
+  //         const retVal = {
+  //           account: account,
+  //           balance: balance
+  //         };
+  //         console.log('getUserBalance :: getBalance :: retVal');
+  //         console.log(retVal);
+  //         resolve(retVal);
+  //       } else {
+  //         reject({account: 'error', balance: 0});
+  //       }
+  //     });
+  //   }) as Promise<any>;
+  // }
 
   
   ngOnInit(): void {
+
     this.connectWallet();
-   this.getAccountAndBalance();
+
+    
+
+
+    window.ethereum.on('accountsChanged', (accounts) => {
+      console.log('event :: accountsChanged')
+      
+      this.getAccountAndBalance();
+
+      //this.connectWallet();
+    });
   }
 
 }
