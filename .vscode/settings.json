@@ -1,4 +1,5 @@
 {
     "solidity.defaultCompiler": "embedded",
-    "solidity.compileUsingLocalVersion": "d:\\ProjekteHDD\\Web3Test\\Web3Test\\soljson-v0.4.6+commit.2dabbdf0.js"
+    "solidity.compileUsingLocalVersion": "d:\\ProjekteHDD\\Web3Test\\Web3Test\\soljson-v0.4.6+commit.2dabbdf0.js",
+    "angular.enable-strict-mode-prompt": false
 }
