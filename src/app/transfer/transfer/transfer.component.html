@@ -2,9 +2,15 @@
 
 <button (click)="connectWallet()" >Connect Wallet</button>
 <button (click)="getAccountAndBalance()" class="btn">Get Account and Balance</button>
+<button (click)="disconnectWallet()">Disconnet Wallet</button>
 
-<h1 id="network">Connected to {{ connectedNetwork }}</h1>
-<h1 id="accountName">Account: {{ accountName }}</h1>
-<h1 id="balance">Balance: {{ balance }}</h1>
+<div id="container">
+   <h1>Connected to <span id="network"></span></h1>
+    <h1 >Account: <span id="accountName"></span></h1>
+    <h1 >Balance: <span id="balance"></span></h1>
+</div>
+
+
+<h1 >IsConnected: <span id="isconnected"></span></h1>
 
 

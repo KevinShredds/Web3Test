@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-
 const Web3 = require('web3');
 
-declare let require: any;
+//declare let require: any;
 declare let window: any;
 
 @Component({
@@ -18,32 +17,39 @@ export class TransferComponent implements OnInit {
   public accountName: string = "Metamask is not connected";
   public connectedNetwork = "";
 
+  public isConnected: boolean = false;
+
 
   constructor() { }
 
   public getAccountAndBalance(): void {
-      console.log("getAccounts from getAccountAndBalance")
-      window.web3.eth.getAccounts().then((accounts) => {        
-        document.getElementById('accountName').innerHTML = accounts[0];
-        window.web3.eth.getBalance(accounts[0]).then(balance => {         
-          document.getElementById('balance').innerHTML = balance;
-          document.getElementById('network').innerHTML = this.getChainName(window.ethereum.chainId);
-        })
+    window.web3.eth.getAccounts().then((accounts) => {        
+      document.getElementById('accountName').innerHTML = accounts[0];
+      window.web3.eth.getBalance(accounts[0]).then(balance => {         
+        document.getElementById('balance').innerHTML = balance;
+        document.getElementById('network').innerHTML = this.getChainName(window.ethereum.chainId);
+        document.getElementById('isconnected').innerHTML = this.isConnected.toString();
       })
-      
+    })  
+  }
+
+  public disconnectWallet() {
+    this.isConnected = false;
+    document.getElementById('container').style.display = 'none';
+    document.getElementById('isconnected').innerHTML = this.isConnected.toString();
   }
 
   public connectWallet(): void {
-    
     if (window.ethereum === undefined) {
       alert('Non-Ethereum browser detected. Install MetaMask');
-    } else {
-      
+    } else {    
       window.web3 = new Web3(window.ethereum);            
       window.web3.eth.requestAccounts();
-
-      this.getAccountAndBalance();
       
+      document.getElementById('container').style.display = 'block';
+      
+      this.getAccountAndBalance(); 
+      this.isConnected = true;
     }
   }
 
@@ -89,21 +95,29 @@ export class TransferComponent implements OnInit {
   
 
   ngOnInit(): void {
-
     this.connectWallet();
 
     window.ethereum.on('accountsChanged', (accounts) => {
-      console.log('event :: accountsChanged')
-      this.getAccountAndBalance();
-
+      console.log('event :: accountsChanged');
+      
+      if (accounts[0] == undefined || this.isConnected == false) {
+        console.log("account disconnected")
+        this.isConnected = false;
+        document.getElementById('isconnected').innerHTML = this.isConnected.toString();
+        document.getElementById('container').style.display = 'none';
+        
+      } else {
+        document.getElementById('container').style.display = 'block';
+        this.getAccountAndBalance();
+      }   
     });
 
     window.ethereum.on('chainChanged', (chainId) => {
       console.log('event :: chainChanged');
-      console.log(chainId);
-      this.getAccountAndBalance();
-
+      //this.getAccountAndBalance();
+      window.location.reload();
     });
+
   }
 
 }
