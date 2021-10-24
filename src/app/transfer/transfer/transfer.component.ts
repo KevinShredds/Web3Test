@@ -22,10 +22,10 @@ export class TransferComponent implements OnInit {
 
   constructor() { }
 
-  public callSmartcontract() {
+  public getCoinString() {
     fetch("../../../assets/ContractAbi/SavePortfolioData.json")
     .then(response => response.json())
-    .then(json => {     
+    .then(json => {  
       var SavePortfolioDataContract = new window.web3.eth.Contract(
         JSON.parse(json.result), '0x3ecC08c594CB07005a467baFBb223F1E277B230B');
       SavePortfolioDataContract.methods.getUser('0x6305856213bc71cE3E07a4D2705D64D2D95BeB04')
@@ -33,6 +33,27 @@ export class TransferComponent implements OnInit {
         document.getElementById('coinString').innerHTML = response.coinString;
       });
     });
+  }
+  public updateCoinString() {
+    fetch("../../../assets/ContractAbi/SavePortfolioData.json")
+    .then(response => response.json())
+    .then(json => {    
+      window.web3.eth.getAccounts().then((accounts) => { 
+        var SavePortfolioDataContract = new window.web3.eth.Contract(
+          JSON.parse(json.result), '0x3ecC08c594CB07005a467baFBb223F1E277B230B');
+  
+        var updateVal = ((document.getElementById('input')) as HTMLInputElement).value;
+        console.log("Transaction pending...");
+        SavePortfolioDataContract.methods.updateUsercoinString(accounts[0], updateVal)
+        .send({
+          from: accounts[0],
+          gas: 1500000
+        }
+        ).then(response => console.log(response));
+      }) 
+      
+    });
+  
   }
 
   public getAccountAndBalance(): void {
@@ -61,7 +82,8 @@ export class TransferComponent implements OnInit {
       
       document.getElementById('container').style.display = 'block';
       
-      this.getAccountAndBalance(); 
+      this.getAccountAndBalance();
+      this.getCoinString(); 
       this.isConnected = true;
     }
   }
@@ -122,6 +144,7 @@ export class TransferComponent implements OnInit {
       } else {
         document.getElementById('container').style.display = 'block';
         this.getAccountAndBalance();
+        this.getCoinString();
       }   
     });
 

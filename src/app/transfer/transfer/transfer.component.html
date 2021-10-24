@@ -1,7 +1,7 @@
 <p>transfer works!</p>
 
 <button (click)="connectWallet()" >Connect Wallet</button>
-<button (click)="callSmartcontract()" class="btn">Call Smartcontract</button>
+<button (click)="getCoinString()" class="btn">getCoinString</button>
 <button (click)="disconnectWallet()">Disconnet Wallet</button>
 
 <div id="container">
@@ -9,6 +9,8 @@
     <h1 >Account: <span id="accountName"></span></h1>
     <h1 >Balance: <span id="balance"></span> ETH</h1>
     <h1 >CoinString: <span id="coinString"></span></h1>
+    <br>
+    <input id="input" type="text"><button (click)="updateCoinString()">Update CoinString</button>
 </div>
 
 
