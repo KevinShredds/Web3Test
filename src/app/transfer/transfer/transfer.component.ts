@@ -22,11 +22,24 @@ export class TransferComponent implements OnInit {
 
   constructor() { }
 
+  public callSmartcontract() {
+    fetch("../../../assets/ContractAbi/SavePortfolioData.json")
+    .then(response => response.json())
+    .then(json => {     
+      var SavePortfolioDataContract = new window.web3.eth.Contract(
+        JSON.parse(json.result), '0x3ecC08c594CB07005a467baFBb223F1E277B230B');
+      SavePortfolioDataContract.methods.getUser('0x6305856213bc71cE3E07a4D2705D64D2D95BeB04')
+      .call().then(response => {
+        document.getElementById('coinString').innerHTML = response.coinString;
+      });
+    });
+  }
+
   public getAccountAndBalance(): void {
     window.web3.eth.getAccounts().then((accounts) => {        
       document.getElementById('accountName').innerHTML = accounts[0];
       window.web3.eth.getBalance(accounts[0]).then(balance => {         
-        document.getElementById('balance').innerHTML = balance;
+        document.getElementById('balance').innerHTML = window.web3.utils.fromWei(balance, 'ether'); 
         document.getElementById('network').innerHTML = this.getChainName(window.ethereum.chainId);
         document.getElementById('isconnected').innerHTML = this.isConnected.toString();
       })

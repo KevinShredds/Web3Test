@@ -1,13 +1,14 @@
 <p>transfer works!</p>
 
 <button (click)="connectWallet()" >Connect Wallet</button>
-<button (click)="getAccountAndBalance()" class="btn">Get Account and Balance</button>
+<button (click)="callSmartcontract()" class="btn">Call Smartcontract</button>
 <button (click)="disconnectWallet()">Disconnet Wallet</button>
 
 <div id="container">
    <h1>Connected to <span id="network"></span></h1>
     <h1 >Account: <span id="accountName"></span></h1>
-    <h1 >Balance: <span id="balance"></span></h1>
+    <h1 >Balance: <span id="balance"></span> ETH</h1>
+    <h1 >CoinString: <span id="coinString"></span></h1>
 </div>
 
 
